@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/dash.css' %}">
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+</head>
+<body>
+  <header class="main-header">
+    <div class="header-container">
+      <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/594114c675c477818cd0269dadef2dad301f200bba2f4182e28c367371e80649?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Logo" class="header-logo">
+      <h1 class="header-title">MindQuest Dashboard</h1>
+    </div>
+  </header>
+
+  <section class="dashboard">
+    <div class="main-container">
+      <div class="content-wrapper">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-content">
+            <!-- Navigation -->
+            <nav class="nav-wrapper">
+              <div class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/662586b30aa39d53222f1e74e498c05c53a76b98715a83cac291026b78b96186?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Home" class="nav-icon">
+                <span><a href="{% url 'quiz_list' %}">Home</a></span>
+              </div>
+            </nav>
+            <ul class="nav-list">
+              <li class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/f75d396f2036614b3479ce0b85eb194300418409c72f2f7c1189d8ed9006261d?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Documents" class="nav-icon-documents">
+                <span><a href="#available-quizzes">Quizzes</a></span>
+              </li>
+              <li class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/af6e71b86d35853c1ef49fc527bafcfb4947a5f70137dd810db0e6c04e242be4?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Classes" class="nav-icon-classes">
+                <span><a href="{% url 'profile' %}">Profile</a></span>
+              </li>
+              <li class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/92ee26e30b35b1e65cf9f7c7bd09899b6158e04d2ecfed77c9c24ed2797aabb6?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Settings" class="nav-icon-settings">
+                <span><a href="{% url 'setting' %}">Settings</a></span>
+              </li>
+              <li class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/fa3df3b56b31246fc5463805f2e90c161746ddf8dc4c285c6e1946ab7e929779?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Sign Out" class="nav-icon-signout">
+                <span><a href="{% url 'logout' %}">Sign Out</a></span>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+          <!-- Search and Welcome Section -->
+          <div class="search-bar">
+            <div class="search-input-wrapper">
+              <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/95e6b0fa6375bdde78de295f2a54e88e82e9573be217444975536c6bd7f21f13?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Search" class="search-icon">
+              <input type="text" class="search-input" placeholder="Search Quizzes, Progress, etc.">
+            </div>
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/629e7df0d52a06e71dfd8c43633c5a6e34f05db6595741fabbd67db74f513628?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Menu" class="menu-icon">
+          </div>
+
+          <!-- Welcome Banner -->
+          <section class="welcome-banner">
+            <div class="welcome-content">
+              <div class="welcome-text">
+                <div class="welcome-image">
+                  <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/2df8155dd3838a0318a8abb68d98bdffe96ac7b301d69c34f3f562540d40b09c?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Decoration" class="image-1">
+                </div>
+                <h1 class="welcome-heading">Welcome back, {{ user.username }}</h1>
+                <p class="welcome-description">Keep pushing to improve.</p>
+              </div>
+            </div>
+          </section>
+
+         <!-- Performance Section -->
+        <section class="performance-section">
+          <div class="performance-content">
+              <h2>Performance</h2>
+              <div class="chart-wrapper">
+                  <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/40bebc5baada81b8e09bcf71315fb6e15fdc84b2022abf21bb57ebca58731ed6?placeholderIfAbsent=true&apiKey=dee05da4dada4a8791d599ff6a3d2458" alt="Performance Chart">
+              </div>
+          </div>
+          <div class="performance-ranking">
+              <h2>Top Performers</h2>
+              {% if top_performers %}
+              {% for performer in top_performers %}
+              <div class="ranking-item">
+                  <span>{{ forloop.counter }}. {{ performer.user.username }}</span>
+                  <span>{{ performer.total_score }} </span>
+              </div>
+              {% endfor %}
+              {% else %}
+              <p>No top performers available.</p>
+              {% endif %}
+          </div>
+      </section>
+
+          <!-- Available Quizzes Section -->
+          <section id="available-quizzes" class="available-quizzes">
+            <h1>Available Quizzes</h1>
+            {% if quizzes %}
+            <ul class="quiz-list">
+              {% for quiz in quizzes %}
+              <li class="quiz-item">
+                <a href="{% url 'quiz_detail' quiz.id %}">{{ quiz.title }}</a>
+                <p class="quiz-description">{{ quiz.description }}</p>
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p>No quizzes are available at the moment.</p>
+            {% endif %}
+          </section>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="sidebar-right">
+          <div class="sidebar-content-right">
+            <div class="user-profile">
+              <img src="{% static 'images/profile.png' %}" alt="Profile" class="profile-image">
+              <span class="profile-name">{{ user.username }}</span>
+            </div>
+
+            <!-- Progress Overview -->
+            <div class="progress-overview">
+              <h2>My Progress</h2>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ progress_percentage }}%;"></div>
+              </div>
+              <p>Grade: {{ grade }}</p> <!-- Display the letter grade -->
+            </div>
+
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2024 MindQuest. All rights reserved.</p>
+    </footer>
+  </section>
+
+<!-- Floating Button -->
+<div id="floating-button" class="floating-button">
+  <img src="{% static 'images/chat.png' %}" alt="AI" />
+</div>
+
+<!-- Recommendation Modal -->
+<div id="recommendation-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Recommended Topics</h2>
+    <ul id="recommendations-list">
+      <!-- Recommendations will be inserted here -->
+    </ul>
+  </div>
+</div>
+  <!-- Smooth Scrolling -->
+  <!-- Smooth Scrolling -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+
+      // Floating button functionality
+      const floatingButton = document.getElementById('floating-button');
+      const modal = document.getElementById('recommendation-modal');
+      const closeBtn = document.querySelector('.modal .close');
+      const recommendationsList = document.getElementById('recommendations-list');
+
+      // Open modal
+      floatingButton.addEventListener('click', async () => {
+        modal.style.display = 'block';
+
+        // Fetch recommendations from OpenAI API
+        try {
+          const response = await fetch('/api/recommendations/', { method: 'GET' });
+          const data = await response.json();
+
+          recommendationsList.innerHTML = data.recommendations.map(rec => `<li>${rec}</li>`).join('');
+        } catch (error) {
+          console.error('Error fetching recommendations:', error);
+          recommendationsList.innerHTML = '<li>Unable to fetch recommendations.</li>';
+        }
+      });
+
+      // Close modal
+      closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+
+      // Close modal if clicked outside
+      window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

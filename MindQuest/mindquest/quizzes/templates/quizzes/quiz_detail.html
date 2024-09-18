@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ quiz.title }} - Quiz</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- Quiz Header -->
+        <div class="quiz-header">
+            <h2>{{ quiz.title }}</h2>
+            <div class="progress-bar">
+                <div class="progress" style="width: {{ progress_percentage }}%;"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Result -->
+        {% if score is not None %}
+            <div class="quiz-result">
+                <h3>Quiz Results</h3>
+                <p>You scored <strong>{{ score }}</strong> out of <strong>{{ total_questions }}</strong>!</p>
+                <p>Percentage: <strong>{{ percentage|floatformat:2 }}%</strong></p>
+                <p><strong>Performance:</strong> {{ performance_message }}</p>
+                <p><strong>Grade:</strong> {{ grade }}</p>
+                <!-- Display Progress Overview -->
+                <div class="progress-overview">
+                    <h2>My Progress</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ progress_percentage }}%;"></div>
+                    </div>
+                    <p>Grade: {{ grade }}</p> <!-- Display the letter grade -->
+                </div>
+            </div>
+        {% else %}
+            <!-- Quiz Questions -->
+            <form method="post">
+                {% csrf_token %}
+                {% for question in questions %}
+                    <div class="question-block">
+                        <h3>{{ question.text }}</h3>
+                        <div class="answers">
+                            {% for answer in question.answers.all %}
+                                <label class="answer-option">
+                                    <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}">
+                                    {{ answer.text }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn submit-btn">Submit Quiz</button>
+            </form>
+        {% endif %}
+
+        <!-- Quiz Footer -->
+        <div class="quiz-footer">
+            <a href="{% url 'quiz_list' %}" class="btn back-btn">Back to Quizzes</a>
+        </div>
+    </div>
+</body>
+</html>

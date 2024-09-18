@@ -1,0 +1,3 @@
+.env
+# Ignore settings.py if it contains sensitive info
+MindQuest/mindquest/settings.py
